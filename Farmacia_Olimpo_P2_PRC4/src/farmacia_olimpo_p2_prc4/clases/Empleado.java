@@ -15,18 +15,17 @@ import java.sql.SQLException;
  * @author jarvi
  */
 public class Empleado {
-     
+
     private String nombre;
     private String apellido;
     private String telefono;
     private String direccion;
     private String email;
     private final Connection cnn;
-    
 
     public Empleado() {
- 
-     cnn = Conexion.Conectar();
+
+        cnn = Conexion.Conectar();
     }
 
     public String getNombre() {
@@ -89,12 +88,44 @@ public class Empleado {
         return resultado;
     }
 
-    public void ActualizarEmpleado() {
-
+    public String ActualizarEmpleado() {
+        String resultado = "El registro se actualizo con exito";
+        try {
+            CallableStatement cmst = cnn.prepareCall("CALL ModificarEmpleados(?,?,?,?,?)");
+            cmst.setString(1, nombre);
+            cmst.setString(2, apellido);
+            cmst.setString(3, telefono);
+            cmst.setString(4, direccion);
+            cmst.setString(5, email);
+            cmst.execute();
+            cnn.close();
+        } catch (SQLException e) {
+            resultado = " No se realizo la operacion " + e.getMessage();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            resultado = " No se realizo la operacion " + ex.getMessage();
+        }
+        return resultado; 
     }
 
-    public void EliminarEmpleado() {
-
+    public String EliminarEmpleado() {
+        String resultado = "El empleado se elimino con exito";
+        try {
+            CallableStatement cmst = cnn.prepareCall("CALL EliminarEmpleados(?,?,?,?,?)");
+            cmst.setString(1, nombre);
+            cmst.setString(2, apellido);
+            cmst.setString(3, telefono);
+            cmst.setString(4, direccion);
+            cmst.setString(5, email);
+            cmst.execute();
+            cnn.close();
+        } catch (SQLException e) {
+            resultado = " No se realizo la operacion " + e.getMessage();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            resultado = " No se realizo la operacion " + ex.getMessage();
+        }
+        return resultado;
     }
 
     public void SeleccionarEmpleado() {
